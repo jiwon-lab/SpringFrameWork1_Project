@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Spring Bean 설정에 필요한 XML 기본 문법 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- 1. 첫 번째 상품 생성: Setter Injection -->
+    <!-- Product 기본 생성자로 객체를 먼저 생성한다. -->
+    <!-- property를 이용하여 Setter 메서드를 호출한다. -->
+
+    <bean id="product1" class="mylab.order.di.xml.Product">
+
+        <!-- setId() 호출 -->
+        <property name="id" value="P001"/>
+
+        <!-- setName() 호출 -->
+        <property name="name" value="노트북"/>
+
+        <!-- setPrice() 호출 -->
+        <property name="price" value="150000"/>
+
+    </bean>
+
+
+    <!-- 2. 두 번째 상품 생성: Constructor Injection -->
+    <!-- 생성자를 호출하면서 상품 정보를 전달한다. -->
+
+    <bean id="product2" class="mylab.order.di.xml.Product">
+
+        <!-- 생성자의 첫 번째 매개변수: id -->
+        <constructor-arg index="0" value="P002"/>
+
+        <!-- 생성자의 두 번째 매개변수: name -->
+        <constructor-arg index="1" value="스마트폰"/>
+
+        <!-- 생성자의 세 번째 매개변수: price -->
+        <constructor-arg index="2" value="800000"/>
+
+    </bean>
+
+
+    <!-- 3. 장바구니 객체 생성: Setter Injection -->
+    <!-- 두 상품을 리스트에 담아서 장바구니에 전달한다. -->
+
+    <bean id="shoppingCart"
+          class="mylab.order.di.xml.ShoppingCart">
+
+        <!-- setProducts() 메서드를 호출한다. -->
+        <property name="products">
+
+            <!-- 상품 목록을 생성한다. -->
+            <list>
+
+                <!-- 위에서 정의한 상품 객체를 참조한다. -->
+                <ref bean="product1"/>
+                <ref bean="product2"/>
+
+            </list>
+
+        </property>
+
+    </bean>
+
+
+    <!-- 4. 주문 서비스 객체 생성: Setter Injection -->
+
+    <bean id="orderService"
+          class="mylab.order.di.xml.OrderService">
+
+        <!-- setShoppingCart() 메서드를 호출한다. -->
+        <!-- 위에서 정의한 장바구니 객체를 전달한다. -->
+
+        <property name="shoppingCart" ref="shoppingCart"/>
+
+    </bean>
+
+</beans>
